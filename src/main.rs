@@ -149,16 +149,17 @@ fn main() {
     // and i ll be able to read and write
     ctx.write_with("notserializablestuff", |ns: &mut NotSerializableStuff| {
         ns.baz = 14;
-    });
+    })
+    .expect("oops");
 
     dbg!(&ctx.read::<NotSerializableStuff>("notserializablestuff"));
 
     // but I won't be able to read / write json values, so js interop will be hard
-    ctx.write_with("notserializablestuff", |ns: &mut NotSerializableStuff| {
-        ns.update_json(|value| {
-            // this wont compile
-        });
-    });
+    // ctx.write_with("notserializablestuff", |ns: &mut NotSerializableStuff| {
+    //     ns.update_json(|value| {
+    //         // this wont compile
+    //     });
+    // });
 
     //     error[E0599]: the method `update_json` exists for mutable reference `&mut NotSerializableStuff`, but its trait bounds were not satisfied
     //    --> src/main.rs:158:12
@@ -174,10 +175,10 @@ fn main() {
     //     |            ^^^^^^^^^^^ method cannot be called on `&mut NotSerializableStuff` due to unsatisfied trait bounds
     //     |
 
-    dbg!(&ctx
-        .read::<NotSerializableStuff>("notserializablestuff")
-        .unwrap()
-        .read_json());
+    // &ctx
+    // .read::<NotSerializableStuff>("notserializablestuff")
+    // .unwrap()
+    // .read_json()
 
     //         error[E0599]: the method `read_json` exists for reference `&NotSerializableStuff`, but its trait bounds were not satisfied
     //    --> src/main.rs:165:10
